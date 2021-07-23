@@ -1,0 +1,8 @@
+FROM adoptopenjdk/openjdk11:alpine-jre
+RUN addgroup -S ec2-user && adduser -S ec2-user -G ec2-user
+USER ec2-user:ec2-user
+WORKDIR /
+COPY config/keystore/demo.jks /home/ec2-user/demo.jks
+ARG JAR_FILE=target/basic_auth_db-0.0.1-SNAPSHOT.jar
+COPY ${JAR_FILE} app.jar
+ENTRYPOINT [“java”,"-jar","-Dspring.profiles.active=docker","/app.jar"]
